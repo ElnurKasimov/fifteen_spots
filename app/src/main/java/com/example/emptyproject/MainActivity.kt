@@ -51,9 +51,8 @@ fun GreetingPreview() {
     EmptyProjectTheme {
         Column{
             Spacer(Modifier.height(100.dp))
-            Greeting("AAA")
+            Greeting("World")
             Spacer(Modifier.height(100.dp))
-            Greeting("!!!!")
         }
     }
 }
