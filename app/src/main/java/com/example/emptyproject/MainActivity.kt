@@ -4,9 +4,13 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,6 +29,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.text.ParagraphStyle
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.style.TextAlign
@@ -94,10 +99,23 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 @Composable
 fun GreetingPreview() {
     EmptyProjectTheme {
-        Column{
-            Spacer(Modifier.height(200.dp))
-            Greeting("World")
-            Spacer(Modifier.height(200.dp))
+        val shape = RoundedCornerShape(8.dp)
+        Button(onClick = {},
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFFF6F5F6),
+                contentColor = Color(0xFFFE5A8F)
+            ),
+            border = BorderStroke(4.dp, Brush.linearGradient(
+                listOf(
+                    Color(0xFFFCEDE),
+                    Color(0xFFFF0254)
+                )
+            )),
+            shape = shape
+            ) {
+            Text(text = "1",
+                fontSize = 30.sp,
+                fontWeight = FontWeight.Bold)
         }
     }
 }
