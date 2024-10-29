@@ -14,6 +14,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 import androidx.compose.ui.tooling.preview.Preview
@@ -99,23 +100,44 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 @Composable
 fun GreetingPreview() {
     EmptyProjectTheme {
-        val shape = RoundedCornerShape(8.dp)
-        Button(onClick = {},
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFFF6F5F6),
-                contentColor = Color(0xFFFE5A8F)
-            ),
-            border = BorderStroke(4.dp, Brush.linearGradient(
-                listOf(
-                    Color(0xFFFCEDE),
-                    Color(0xFFFF0254)
-                )
-            )),
-            shape = shape
+        Column(
+                modifier = Modifier.fillMaxHeight(),
+                verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically)
             ) {
-            Text(text = "1",
-                fontSize = 30.sp,
-                fontWeight = FontWeight.Bold)
+            repeat(4) { outerIndex ->
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                ) {
+                    repeat(4) {innerIndex ->
+                        val shape = RoundedCornerShape(8.dp)
+                        Button(
+                            onClick = {},
+                            modifier = Modifier.size(80.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color(0xFFF6F5F6),
+                                contentColor = Color(0xFFFE5A8F)
+                            ),
+                            border = BorderStroke(
+                                4.dp, Brush.linearGradient(
+                                    listOf(
+                                        Color(0xFFFCEDE),
+                                        Color(0xFFFF0254)
+                                    )
+                                )
+                            ),
+                            shape = shape,
+                            contentPadding = PaddingValues(0.dp)
+                        ) {
+                            Text(
+                                text = (outerIndex * 4 + innerIndex +1).toString(),
+                                fontSize = 50.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    }
+                }
+            }
         }
     }
 }
