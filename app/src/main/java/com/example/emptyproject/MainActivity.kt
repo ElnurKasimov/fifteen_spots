@@ -93,6 +93,47 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
     }
 }
 
+@Composable
+fun Chip(cell: Int) {
+    val shape = RoundedCornerShape(8.dp)
+    val myBorder: BorderStroke?
+    val myText: String
+    val myColor: Long
+    if(cell == 16) {
+        myBorder = null
+        myText = ""
+        myColor = 0x00FEE1FC
+    } else {
+         myBorder = BorderStroke(
+            5.dp, Brush.linearGradient(
+                listOf(
+                    Color(0xFFE5DBE4),
+                    Color(0xFF71566E)
+                )
+            )
+        )
+        myText = cell.toString()
+        myColor = 0xFFFEE1FC
+    }
+    Button(
+        onClick = {},
+        modifier = Modifier.size(80.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Color(myColor),
+            contentColor = Color(0xFFFE5A8F)
+        ),
+        border = myBorder,
+        shape = shape,
+        contentPadding = PaddingValues(0.dp)
+    ) {
+        Text(
+            text = myText,
+            fontSize = 50.sp,
+            fontWeight = FontWeight.Bold
+        )
+    }
+}
+
 @Preview(
     device = "spec:parent=pixel_5",
     showBackground = true, showSystemUi = true
@@ -110,31 +151,7 @@ fun GreetingPreview() {
                     horizontalArrangement = Arrangement.SpaceEvenly,
                 ) {
                     repeat(4) {innerIndex ->
-                        val shape = RoundedCornerShape(8.dp)
-                        Button(
-                            onClick = {},
-                            modifier = Modifier.size(80.dp),
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = Color(0xFFF6F5F6),
-                                contentColor = Color(0xFFFE5A8F)
-                            ),
-                            border = BorderStroke(
-                                4.dp, Brush.linearGradient(
-                                    listOf(
-                                        Color(0xFFFCEDE),
-                                        Color(0xFFFF0254)
-                                    )
-                                )
-                            ),
-                            shape = shape,
-                            contentPadding = PaddingValues(0.dp)
-                        ) {
-                            Text(
-                                text = (outerIndex * 4 + innerIndex +1).toString(),
-                                fontSize = 50.sp,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
+                        Chip(outerIndex * 4 + innerIndex + 1)
                     }
                 }
             }
