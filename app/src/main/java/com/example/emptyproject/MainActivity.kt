@@ -1,3 +1,4 @@
+
 package com.example.emptyproject
 
 import android.os.Bundle
@@ -14,6 +15,10 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
@@ -93,8 +98,49 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
     }
 }
 
+@Preview(
+    device = "spec:parent=pixel_5",
+    showBackground = true, showSystemUi = true
+)
 @Composable
-fun Chip(cell: Int) {
+fun GreetingPreview(engine: FifteenEngine = Engine()) {
+    EmptyProjectTheme {
+        var cells by remember {
+            mutableStateOf(engine.getInitialState())
+        }
+        Grid(cells) {
+            chipNumber -> cells = engine.transitionState(cells, chipNumber)
+        }
+    }
+}
+
+@Composable
+fun Grid(
+    cells: List<Int>,
+    onChipClick: (Int) -> Unit
+) {
+    Column(
+        modifier = Modifier.fillMaxHeight(),
+        verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically)
+    ) {
+        repeat(4) { outerIndex ->
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly,
+            ) {
+                repeat(4) {innerIndex ->
+                    Chip(cells[outerIndex * 4 + innerIndex], onChipClick )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun Chip(
+    cell: Int,
+    onClick: (Int) -> Unit
+) {
     val shape = RoundedCornerShape(8.dp)
     val myBorder: BorderStroke?
     val myText: String
@@ -116,7 +162,7 @@ fun Chip(cell: Int) {
         myColor = 0xFFFEE1FC
     }
     Button(
-        onClick = {},
+        onClick = {onClick(cell)},
         modifier = Modifier.size(80.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = Color(myColor),
@@ -131,30 +177,5 @@ fun Chip(cell: Int) {
             fontSize = 50.sp,
             fontWeight = FontWeight.Bold
         )
-    }
-}
-
-@Preview(
-    device = "spec:parent=pixel_5",
-    showBackground = true, showSystemUi = true
-)
-@Composable
-fun GreetingPreview() {
-    EmptyProjectTheme {
-        Column(
-                modifier = Modifier.fillMaxHeight(),
-                verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically)
-            ) {
-            repeat(4) { outerIndex ->
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                ) {
-                    repeat(4) {innerIndex ->
-                        Chip(outerIndex * 4 + innerIndex + 1)
-                    }
-                }
-            }
-        }
     }
 }
