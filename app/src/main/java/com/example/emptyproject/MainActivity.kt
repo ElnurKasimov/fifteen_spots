@@ -14,6 +14,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -103,7 +104,7 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
     showBackground = true, showSystemUi = true
 )
 @Composable
-fun GreetingPreview(engine: FifteenEngine = Engine()) {
+fun GreetingPreview(engine: FifteenEngine = FifteenEngine) {
     EmptyProjectTheme {
         var cells by remember {
             mutableStateOf(engine.getInitialState())
