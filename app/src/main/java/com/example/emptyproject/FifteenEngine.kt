@@ -44,11 +44,16 @@ interface FifteenEngine {
         }
 
         override fun transitionState(oldState: List<Int>, cell: Int): List<Int> {
-            val indexFromMove = oldState.indexOf(cell)
-            val indexToMove = oldState.indexOf(16)
-            val newState = oldState.toMutableList()
-            newState[indexFromMove] = newState[indexToMove].also { newState[indexToMove] = newState[indexFromMove]}
-            return newState.toList()
+            if(isStepPossible(oldState, cell)) {
+                val indexFromMove = oldState.indexOf(cell)
+                val indexToMove = oldState.indexOf(16)
+                val newState = oldState.toMutableList()
+                newState[indexFromMove] = newState[indexToMove].also { newState[indexToMove] = newState[indexFromMove]}
+                return newState.toList()
+            } else {
+                return oldState
+            }
+
         }
 
         override fun isWin(playingChips: List<Int> ): Boolean {
