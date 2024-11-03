@@ -50,68 +50,68 @@ class MainActivity : ComponentActivity() {
         setContent {
             EmptyProjectTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                    Main ()
                 }
             }
         }
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = buildAnnotatedString1 {
-            withStyle(style = ParagraphStyle(lineHeight = 2.5.em,
-                                             textAlign = TextAlign.Center)) {
-                withStyle(
-                    style = SpanStyle(fontWeight = FontWeight.Bold,
-                                            color = Color(0xFF1FBC86),
-                                            fontSize = 50.sp,
-                                            shadow = Shadow(
-                                                color = Color(0xFFC80EEF),
-                                                offset = Offset(10f, 10f),
-                                                blurRadius = 15f
-                                            ))) {
-                    append("Hello $name!\n")
-                }
-                withStyle(
-                    style = SpanStyle(color = Color(0xFFFCBA43),
-                                      fontStyle = FontStyle.Italic,
-                                      fontSize = 40.sp,
-                                      shadow = Shadow(
-                                          color = Color(0xFF0e2dcf),
-                                          offset = Offset(15f, 15f),
-                                          blurRadius = 15f
-                                      ))) {
-                    append("I'm Android\n")
-                }
-                append("playing with styles")
-            }
-        },
-        modifier = modifier,
-        fontSize = 25.sp,
-    )
-    Box(Modifier){
-
-    }
-}
+//@Composable
+//fun Greeting(name: String, modifier: Modifier = Modifier) {
+//    Text(
+//        text = buildAnnotatedString1 {
+//            withStyle(style = ParagraphStyle(lineHeight = 2.5.em,
+//                                             textAlign = TextAlign.Center)) {
+//                withStyle(
+//                    style = SpanStyle(fontWeight = FontWeight.Bold,
+//                                            color = Color(0xFF1FBC86),
+//                                            fontSize = 50.sp,
+//                                            shadow = Shadow(
+//                                                color = Color(0xFFC80EEF),
+//                                                offset = Offset(10f, 10f),
+//                                                blurRadius = 15f
+//                                            ))) {
+//                    append("Hello $name!\n")
+//                }
+//                withStyle(
+//                    style = SpanStyle(color = Color(0xFFFCBA43),
+//                                      fontStyle = FontStyle.Italic,
+//                                      fontSize = 40.sp,
+//                                      shadow = Shadow(
+//                                          color = Color(0xFF0e2dcf),
+//                                          offset = Offset(15f, 15f),
+//                                          blurRadius = 15f
+//                                      ))) {
+//                    append("I'm Android\n")
+//                }
+//                append("playing with styles")
+//            }
+//        },
+//        modifier = modifier,
+//        fontSize = 25.sp,
+//    )
+//    Box(Modifier){
+//
+//    }
+//}
 
 @Preview(
     device = "spec:parent=pixel_5",
     showBackground = true, showSystemUi = true
 )
 @Composable
-fun GreetingPreview(engine: FifteenEngine = FifteenEngine) {
-    EmptyProjectTheme {
-        var cells by remember {
-            mutableStateOf(engine.getInitialState())
-        }
-        Grid(cells) {
+fun GreetingPreview() {
+    Main()
+}
+
+@Composable
+fun Main (engine: FifteenEngine = FifteenEngine) {
+    var cells by remember {
+        mutableStateOf(engine.getInitialState())
+    }
+    Grid(cells) {
             chipNumber -> cells = engine.transitionState(cells, chipNumber)
-        }
     }
 }
 
