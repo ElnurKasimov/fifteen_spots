@@ -2,6 +2,7 @@
 package com.example.emptyproject
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -12,6 +13,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -43,13 +46,23 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.text.buildAnnotatedString as buildAnnotatedString1
 
+@OptIn(ExperimentalMaterial3Api::class)
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             EmptyProjectTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
+                    topBar = {
+                        CenterAlignedTopAppBar(
+                            title = {
+                                Text(text = "Fifteen Spots Game")
+                            }
+                        )
+                    }
+                ) { innerPadding ->
                     Main ()
                 }
             }
@@ -163,7 +176,10 @@ fun Chip(
         myColor = 0xFFFEE1FC
     }
     Button(
-        onClick = {onClick(cell)},
+        onClick = {
+            onClick(cell)
+            Log.i("MyButtonOnClick", "ClicKing on chip with number $cell")
+        },
         modifier = Modifier.size(80.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = Color(myColor),
