@@ -7,6 +7,8 @@ interface FifteenEngine {
     fun isStepPossible(inputList: List<Int>, numberForMove: Int): Boolean
 
     companion object: FifteenEngine {
+        val FINAL_STATE =  List(16){ it + 1 }
+
         override fun getInitialState(): List<Int> {
             var playingChips: List<Int>
             do {
@@ -57,8 +59,7 @@ interface FifteenEngine {
         }
 
         override fun isWin(playingChips: List<Int> ): Boolean {
-            val finalState = List(16){ it + 1 }
-            return playingChips == finalState
+            return playingChips == FINAL_STATE
         }
 
 //        fun isInputInRange(number: Int): Boolean  = number in 1..15
