@@ -40,6 +40,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.ParagraphStyle
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.style.TextAlign
@@ -58,12 +59,19 @@ class MainActivity : ComponentActivity() {
                     topBar = {
                         CenterAlignedTopAppBar(
                             title = {
-                                Text(text = "Fifteen Spots Game")
+                                Text(
+                                    text = stringResource(R.string.fifteen_spots_game),
+                                    fontSize = 20.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color(0xFFFE5A8F)
+                                    )
                             }
                         )
                     }
                 ) { innerPadding ->
-                    Main ()
+                    Main(modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding))
                 }
             }
         }
@@ -109,21 +117,45 @@ class MainActivity : ComponentActivity() {
 //    }
 //}
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview(
     device = "spec:parent=pixel_5",
-    showBackground = true, showSystemUi = true
+    showBackground = true, showSystemUi = true, locale = "uk"
 )
 @Composable
 fun GreetingPreview() {
-    Main()
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(
+                        text = stringResource(R.string.fifteen_spots_game),
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFFFE5A8F)
+                    )
+                }
+            )
+        }
+    ) { innerPadding ->
+        Main(modifier = Modifier
+            .fillMaxSize()
+            .padding(innerPadding))
+    }
 }
 
 @Composable
-fun Main (engine: FifteenEngine = FifteenEngine) {
+fun Main (
+    modifier: Modifier = Modifier,
+    engine: FifteenEngine = FifteenEngine) {
     var cells by remember {
         mutableStateOf(engine.getInitialState())
     }
-    Grid(cells) {
+    Grid(
+        cells,
+        modifier
+    ) {
             chipNumber -> cells = engine.transitionState(cells, chipNumber)
     }
 }
@@ -131,10 +163,11 @@ fun Main (engine: FifteenEngine = FifteenEngine) {
 @Composable
 fun Grid(
     cells: List<Int>,
+    modifier: Modifier,
     onChipClick: (Int) -> Unit
 ) {
     Column(
-        modifier = Modifier.fillMaxHeight(),
+        modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically)
     ) {
         repeat(4) { outerIndex ->
@@ -178,7 +211,7 @@ fun Chip(
     Button(
         onClick = {
             onClick(cell)
-            Log.i("MyButtonOnClick", "ClicKing on chip with number $cell")
+            Log.i("MyButtonOnClick", "Clicking on chip with number $cell")
         },
         modifier = Modifier.size(80.dp),
         colors = ButtonDefaults.buttonColors(
