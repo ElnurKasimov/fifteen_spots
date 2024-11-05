@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -63,12 +64,48 @@ class MainActivity : ComponentActivity() {
                             title = {
                                 Text(
                                     text = stringResource(R.string.fifteen_spots_game),
-                                    fontSize = 20.sp,
+                                    fontSize = 25.sp,
                                     fontWeight = FontWeight.Bold,
                                     color = Color(0xFFFE5A8F)
                                 )
                             }
                         )
+                    },
+                    bottomBar = {
+                        BottomAppBar(
+                            modifier = Modifier.padding(
+                                bottom = WindowInsets.navigationBars.asPaddingValues()
+                                    .calculateBottomPadding()
+                            ),
+                            containerColor = Color.Transparent
+                        ) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth().align(Alignment.CenterVertically),
+                                horizontalArrangement = Arrangement.Center
+                            ) {
+                                Button(
+                                    onClick = {},
+                                    modifier = Modifier
+                                        .width(150.dp)
+                                        .height(60.dp),
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = Color(0xFFFEE1FC),
+                                        contentColor = Color(0xFFFE5A8F),
+                                    ),
+                                    shape = ShapeDefaults.Medium,
+                                    border = BorderStroke(
+                                        width = 4.dp ,
+                                        color = Color(0x9971566E)
+                                    )
+                                ) {
+                                    Text(
+                                        text = "Reset",
+                                        fontSize = 25.sp,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                }
+                            }
+                        }
                     }
                 ) { innerPadding ->
                     Main(
@@ -85,7 +122,7 @@ class MainActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(
     device = "spec:parent=pixel_5",
-    showBackground = true, showSystemUi = true, locale = "uk"
+    showBackground = true, showSystemUi = true
 )
 @Composable
 fun GreetingPreview() {
@@ -96,7 +133,7 @@ fun GreetingPreview() {
                 title = {
                     Text(
                         text = stringResource(R.string.fifteen_spots_game),
-                        fontSize = 20.sp,
+                        fontSize = 25.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color(0xFFFE5A8F)
                     )
@@ -104,26 +141,38 @@ fun GreetingPreview() {
             )
         },
         bottomBar = {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
+            BottomAppBar(
+                modifier = Modifier.padding(
+                    bottom = WindowInsets.navigationBars.asPaddingValues()
+                        .calculateBottomPadding()
+                ),
+                containerColor = Color.Transparent
             ) {
-                Button(
-                    onClick = {},
-                    modifier = Modifier.
-                            width(150.dp).
-                            height(60.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFFFEE1FC),
-                        contentColor = Color(0xFFFE5A8F),
-                    ),
-                    shape = ShapeDefaults.Medium
+                Row(
+                    modifier = Modifier.fillMaxWidth().align(Alignment.CenterVertically),
+                    horizontalArrangement = Arrangement.Center
                 ) {
-                    Text(
-                        text = "Reset",
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold
-                    )
+                    Button(
+                        onClick = {},
+                        modifier = Modifier
+                            .width(150.dp)
+                            .height(60.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color(0xFFFEE1FC),
+                            contentColor = Color(0xFFFE5A8F),
+                        ),
+                        shape = ShapeDefaults.Medium,
+                        border = BorderStroke(
+                            width = 4.dp ,
+                            color = Color(0x9971566E)
+                        )
+                    ) {
+                        Text(
+                            text = "Reset",
+                            fontSize = 25.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                 }
             }
         }
