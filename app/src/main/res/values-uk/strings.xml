@@ -2,4 +2,6 @@
 <resources>
     <string name="app_name">EmptyProject</string>
     <string name="fifteen_spots_game">П\'ятнашки</string>
+    <string name="victory">Перемога !\n</string>
+    <string name="you_have_won_for_min_and_sec">Ви перемогли за\n %1$s хв та  %2$s сек</string>
 </resources>

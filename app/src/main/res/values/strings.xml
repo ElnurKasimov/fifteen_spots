@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">EmptyProject</string>
     <string name="fifteen_spots_game">Fifteen Spots Game</string>
+    <string name="victory">VICTORY !\n</string>
+    <string name="you_have_won_for_min_and_sec">You have won for\n %1$s min and %2$s sec</string>
 </resources>

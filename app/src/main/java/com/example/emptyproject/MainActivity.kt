@@ -20,6 +20,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -165,6 +166,7 @@ fun Main(
 ) {
     var cells by remember { mutableStateOf(engine.getInitialState()) }
     val isWin by remember { derivedStateOf {engine.isWin(cells)} }
+    val startTime by remember { mutableLongStateOf(System.currentTimeMillis()) }
     if (!isWin) {
         Grid(
             cells,
@@ -173,10 +175,52 @@ fun Main(
             cells = engine.transitionState(cells, chipNumber)
         }
     } else {
+        val endTime = System.currentTimeMillis()
+        val timeSpent = (endTime - startTime) / 1000
+        val durationMin = timeSpent / 60
+        val durationSec = timeSpent % 60
+        val text1 = stringResource(R.string.victory)
+        val text2 = stringResource(R.string.you_have_won_for_min_and_sec, durationMin, durationSec)
         Text(
-            text = "VICTORY",
-            modifier = modifier,
-            color = Color(0xFFFE5A8F)
+            text = buildAnnotatedString1 {
+                withStyle(
+                    style = ParagraphStyle(
+                        lineHeight = 3.5.em,
+                        textAlign = TextAlign.Center
+                    )
+                ) {
+                    withStyle(
+                        style = SpanStyle(
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFFf4fb04),
+                            fontSize = 50.sp,
+                            shadow = Shadow(
+                                color = Color(0xFF0e2dcf),
+                                offset = Offset(10f, 10f),
+                                blurRadius = 15f
+                            )
+                        )
+                    ) {
+                        append(text1)
+                    }
+                    withStyle(
+                        style = SpanStyle(
+                            color = Color(0xFFf4fb04),
+                            fontWeight = FontWeight.Bold,
+                            fontStyle = FontStyle.Italic,
+                            fontSize = 40.sp,
+                            shadow = Shadow(
+                                color = Color(0xFF0e2dcf),
+                                offset = Offset(10f, 10f),
+                                blurRadius = 15f
+                            )
+                        )
+                    ) {
+                        append(text2)
+                    }
+                }
+            },
+            modifier = modifier.wrapContentSize(Alignment.Center)
         )
     }
 
