@@ -15,6 +15,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -81,45 +82,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-//@Composable
-//fun Greeting(name: String, modifier: Modifier = Modifier) {
-//    Text(
-//        text = buildAnnotatedString1 {
-//            withStyle(style = ParagraphStyle(lineHeight = 2.5.em,
-//                                             textAlign = TextAlign.Center)) {
-//                withStyle(
-//                    style = SpanStyle(fontWeight = FontWeight.Bold,
-//                                            color = Color(0xFF1FBC86),
-//                                            fontSize = 50.sp,
-//                                            shadow = Shadow(
-//                                                color = Color(0xFFC80EEF),
-//                                                offset = Offset(10f, 10f),
-//                                                blurRadius = 15f
-//                                            ))) {
-//                    append("Hello $name!\n")
-//                }
-//                withStyle(
-//                    style = SpanStyle(color = Color(0xFFFCBA43),
-//                                      fontStyle = FontStyle.Italic,
-//                                      fontSize = 40.sp,
-//                                      shadow = Shadow(
-//                                          color = Color(0xFF0e2dcf),
-//                                          offset = Offset(15f, 15f),
-//                                          blurRadius = 15f
-//                                      ))) {
-//                    append("I'm Android\n")
-//                }
-//                append("playing with styles")
-//            }
-//        },
-//        modifier = modifier,
-//        fontSize = 25.sp,
-//    )
-//    Box(Modifier){
-//
-//    }
-//}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(
     device = "spec:parent=pixel_5",
@@ -140,6 +102,30 @@ fun GreetingPreview() {
                     )
                 }
             )
+        },
+        bottomBar = {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Button(
+                    onClick = {},
+                    modifier = Modifier.
+                            width(150.dp).
+                            height(60.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFFFEE1FC),
+                        contentColor = Color(0xFFFE5A8F),
+                    ),
+                    shape = ShapeDefaults.Medium
+                ) {
+                    Text(
+                        text = "Reset",
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
         }
     ) { innerPadding ->
         Main(
