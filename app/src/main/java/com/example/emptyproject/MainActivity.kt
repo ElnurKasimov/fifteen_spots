@@ -18,6 +18,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -162,15 +163,23 @@ fun Main(
     modifier: Modifier = Modifier,
     engine: FifteenEngine = FifteenEngine
 ) {
-    var cells by remember {
-        mutableStateOf(engine.getInitialState())
+    var cells by remember { mutableStateOf(engine.getInitialState()) }
+    val isWin by remember { derivedStateOf {engine.isWin(cells)} }
+    if (!isWin) {
+        Grid(
+            cells,
+            modifier
+        ) { chipNumber ->
+            cells = engine.transitionState(cells, chipNumber)
+        }
+    } else {
+        Text(
+            text = "VICTORY",
+            modifier = modifier,
+            color = Color(0xFFFE5A8F)
+        )
     }
-    Grid(
-        cells,
-        modifier
-    ) { chipNumber ->
-        cells = engine.transitionState(cells, chipNumber)
-    }
+
 }
 
 @Composable
