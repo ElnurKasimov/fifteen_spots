@@ -1,4 +1,3 @@
-
 package com.example.emptyproject
 
 import android.os.Bundle
@@ -64,14 +63,16 @@ class MainActivity : ComponentActivity() {
                                     fontSize = 20.sp,
                                     fontWeight = FontWeight.Bold,
                                     color = Color(0xFFFE5A8F)
-                                    )
+                                )
                             }
                         )
                     }
                 ) { innerPadding ->
-                    Main(modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding))
+                    Main(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(innerPadding)
+                    )
                 }
             }
         }
@@ -139,24 +140,36 @@ fun GreetingPreview() {
             )
         }
     ) { innerPadding ->
-        Main(modifier = Modifier
-            .fillMaxSize()
-            .padding(innerPadding))
+        Main(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding),
+            engine = object : FifteenEngine by FifteenEngine.Companion {
+                override fun getInitialState(): List<Int> =
+                    buildList {
+                        repeat(14) {add(it + 1)
+                        }
+                        add(16)
+                        add(15)
+                    }
+            }
+        )
     }
 }
 
 @Composable
-fun Main (
+fun Main(
     modifier: Modifier = Modifier,
-    engine: FifteenEngine = FifteenEngine) {
+    engine: FifteenEngine = FifteenEngine
+) {
     var cells by remember {
         mutableStateOf(engine.getInitialState())
     }
     Grid(
         cells,
         modifier
-    ) {
-            chipNumber -> cells = engine.transitionState(cells, chipNumber)
+    ) { chipNumber ->
+        cells = engine.transitionState(cells, chipNumber)
     }
 }
 
@@ -175,8 +188,8 @@ fun Grid(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly,
             ) {
-                repeat(4) {innerIndex ->
-                    Chip(cells[outerIndex * 4 + innerIndex], onChipClick )
+                repeat(4) { innerIndex ->
+                    Chip(cells[outerIndex * 4 + innerIndex], onChipClick)
                 }
             }
         }
@@ -192,12 +205,12 @@ fun Chip(
     val myBorder: BorderStroke?
     val myText: String
     val myColor: Long
-    if(cell == 16) {
+    if (cell == 16) {
         myBorder = null
         myText = ""
         myColor = 0x00FEE1FC
     } else {
-         myBorder = BorderStroke(
+        myBorder = BorderStroke(
             5.dp, Brush.linearGradient(
                 listOf(
                     Color(0xFFE5DBE4),
