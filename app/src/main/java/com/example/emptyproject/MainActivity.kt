@@ -139,8 +139,7 @@ fun Main(
     val startTime by remember { mutableLongStateOf(System.currentTimeMillis()) }
     if (!isWin) {
         Grid(
-//            cells,
-//            onCellsUpdate = onCellsUpdate,
+            cells,
             modifier
         ) { chipNumber ->
             val oldState = cells

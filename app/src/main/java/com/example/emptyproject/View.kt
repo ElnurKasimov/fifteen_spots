@@ -43,8 +43,7 @@ import com.example.emptyproject.ui.theme.EmptyProjectTheme
 
 @Composable
 fun Grid(
-//    cells: List<Int>,
-//    onCellsUpdate: (List<Int>) -> Unit,
+    cells: List<Int>,
     modifier: Modifier,
     onChipClick: (Int) -> Unit
 ) {
