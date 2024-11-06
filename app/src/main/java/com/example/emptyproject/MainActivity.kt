@@ -22,6 +22,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -64,7 +65,7 @@ class MainActivity : ComponentActivity() {
                             title = {
                                 Text(
                                     text = stringResource(R.string.fifteen_spots_game),
-                                    fontSize = 25.sp,
+                                    fontSize = 40.sp,
                                     fontWeight = FontWeight.Bold,
                                     color = Color(0xFFFE5A8F)
                                 )
@@ -80,14 +81,16 @@ class MainActivity : ComponentActivity() {
                             containerColor = Color.Transparent
                         ) {
                             Row(
-                                modifier = Modifier.fillMaxWidth().align(Alignment.CenterVertically),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .align(Alignment.CenterVertically),
                                 horizontalArrangement = Arrangement.Center
                             ) {
                                 Button(
                                     onClick = {},
                                     modifier = Modifier
-                                        .width(150.dp)
-                                        .height(60.dp),
+                                        .width(250.dp)
+                                        .height(50.dp),
                                     colors = ButtonDefaults.buttonColors(
                                         containerColor = Color(0xFFFEE1FC),
                                         contentColor = Color(0xFFFE5A8F),
@@ -96,10 +99,11 @@ class MainActivity : ComponentActivity() {
                                     border = BorderStroke(
                                         width = 4.dp ,
                                         color = Color(0x9971566E)
-                                    )
+                                    ),
+                                    contentPadding = PaddingValues(0.dp)
                                 ) {
                                     Text(
-                                        text = "Reset",
+                                        text = stringResource(R.string.reset),
                                         fontSize = 25.sp,
                                         fontWeight = FontWeight.Bold
                                     )
@@ -119,81 +123,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Preview(
-    device = "spec:parent=pixel_5",
-    showBackground = true, showSystemUi = true
-)
-@Composable
-fun GreetingPreview() {
-    Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        topBar = {
-            CenterAlignedTopAppBar(
-                title = {
-                    Text(
-                        text = stringResource(R.string.fifteen_spots_game),
-                        fontSize = 25.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color(0xFFFE5A8F)
-                    )
-                }
-            )
-        },
-        bottomBar = {
-            BottomAppBar(
-                modifier = Modifier.padding(
-                    bottom = WindowInsets.navigationBars.asPaddingValues()
-                        .calculateBottomPadding()
-                ),
-                containerColor = Color.Transparent
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth().align(Alignment.CenterVertically),
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Button(
-                        onClick = {},
-                        modifier = Modifier
-                            .width(150.dp)
-                            .height(60.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xFFFEE1FC),
-                            contentColor = Color(0xFFFE5A8F),
-                        ),
-                        shape = ShapeDefaults.Medium,
-                        border = BorderStroke(
-                            width = 4.dp ,
-                            color = Color(0x9971566E)
-                        )
-                    ) {
-                        Text(
-                            text = "Reset",
-                            fontSize = 25.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                }
-            }
-        }
-    ) { innerPadding ->
-        Main(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
-            engine = object : FifteenEngine by FifteenEngine.Companion {
-                override fun getInitialState(): List<Int> =
-                    buildList {
-                        repeat(14) {add(it + 1)
-                        }
-                        add(16)
-                        add(15)
-                    }
-            }
-        )
-    }
-}
-
 @Composable
 fun Main(
     modifier: Modifier = Modifier,
@@ -201,13 +130,18 @@ fun Main(
 ) {
     var cells by remember { mutableStateOf(engine.getInitialState()) }
     val isWin by remember { derivedStateOf {engine.isWin(cells)} }
+    var move by remember { mutableIntStateOf(0) }
     val startTime by remember { mutableLongStateOf(System.currentTimeMillis()) }
     if (!isWin) {
         Grid(
             cells,
             modifier
         ) { chipNumber ->
+            val oldState = cells
             cells = engine.transitionState(cells, chipNumber)
+            if(cells != oldState) {
+                move++
+            }
         }
     } else {
         val endTime = System.currentTimeMillis()
@@ -216,6 +150,7 @@ fun Main(
         val durationSec = timeSpent % 60
         val text1 = stringResource(R.string.victory)
         val text2 = stringResource(R.string.you_have_won_for_min_and_sec, durationMin, durationSec)
+        val text3 = stringResource(R.string.performed_moves, move)
         Text(
             text = buildAnnotatedString1 {
                 withStyle(
@@ -228,7 +163,7 @@ fun Main(
                         style = SpanStyle(
                             fontWeight = FontWeight.Bold,
                             color = Color(0xFFf4fb04),
-                            fontSize = 50.sp,
+                            fontSize = 60.sp,
                             shadow = Shadow(
                                 color = Color(0xFF0e2dcf),
                                 offset = Offset(10f, 10f),
@@ -240,18 +175,19 @@ fun Main(
                     }
                     withStyle(
                         style = SpanStyle(
-                            color = Color(0xFFf4fb04),
+                            color = Color(0x770e2dcf),
                             fontWeight = FontWeight.Bold,
                             fontStyle = FontStyle.Italic,
-                            fontSize = 40.sp,
-                            shadow = Shadow(
-                                color = Color(0xFF0e2dcf),
-                                offset = Offset(10f, 10f),
-                                blurRadius = 15f
-                            )
+                            fontSize = 36.sp,
+//                            shadow = Shadow(
+//                                color = Color(0xFFf4fb04),
+//                                offset = Offset(10f, 10f),
+//                                blurRadius = 15f
+//                            )
                         )
                     ) {
                         append(text2)
+                        append(text3)
                     }
                 }
             },
@@ -261,72 +197,5 @@ fun Main(
 
 }
 
-@Composable
-fun Grid(
-    cells: List<Int>,
-    modifier: Modifier,
-    onChipClick: (Int) -> Unit
-) {
-    Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically)
-    ) {
-        repeat(4) { outerIndex ->
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly,
-            ) {
-                repeat(4) { innerIndex ->
-                    Chip(cells[outerIndex * 4 + innerIndex], onChipClick)
-                }
-            }
-        }
-    }
-}
 
-@Composable
-fun Chip(
-    cell: Int,
-    onClick: (Int) -> Unit
-) {
-    val shape = RoundedCornerShape(8.dp)
-    val myBorder: BorderStroke?
-    val myText: String
-    val myColor: Long
-    if (cell == 16) {
-        myBorder = null
-        myText = ""
-        myColor = 0x00FEE1FC
-    } else {
-        myBorder = BorderStroke(
-            5.dp, Brush.linearGradient(
-                listOf(
-                    Color(0xFFE5DBE4),
-                    Color(0xFF71566E)
-                )
-            )
-        )
-        myText = cell.toString()
-        myColor = 0xFFFEE1FC
-    }
-    Button(
-        onClick = {
-            onClick(cell)
-            Log.i("MyButtonOnClick", "Clicking on chip with number $cell")
-        },
-        modifier = Modifier.size(80.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = Color(myColor),
-            contentColor = Color(0xFFFE5A8F)
-        ),
-        border = myBorder,
-        shape = shape,
-        contentPadding = PaddingValues(0.dp)
-    ) {
-        Text(
-            text = myText,
-            fontSize = 50.sp,
-            fontWeight = FontWeight.Bold
-        )
-    }
-}
+
