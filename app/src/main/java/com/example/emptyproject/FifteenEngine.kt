@@ -62,8 +62,6 @@ interface FifteenEngine {
             return playingChips == FINAL_STATE
         }
 
-//        fun isInputInRange(number: Int): Boolean  = number in 1..15
-
         override fun isStepPossible(inputList: List<Int>, numberForMove: Int): Boolean {
             val indexToMove = inputList.indexOf(numberForMove)
             val emptyPlaceIndex = inputList.indexOf(16)

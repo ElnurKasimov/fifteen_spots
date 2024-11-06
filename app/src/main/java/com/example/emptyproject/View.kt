@@ -25,6 +25,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -34,11 +38,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.emptyproject.ui.theme.EmptyProjectTheme
 
 
 @Composable
 fun Grid(
-    cells: List<Int>,
+//    cells: List<Int>,
+//    onCellsUpdate: (List<Int>) -> Unit,
     modifier: Modifier,
     onChipClick: (Int) -> Unit
 ) {
@@ -116,71 +122,82 @@ fun Chip(
 )
 @Composable
 fun GreetingPreview() {
-    Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        topBar = {
-            CenterAlignedTopAppBar(
-                title = {
-                    Text(
-                        text = stringResource(R.string.fifteen_spots_game),
-                        fontSize = 40.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color(0xFFFE5A8F)
-                    )
+    val engine = object : FifteenEngine by FifteenEngine.Companion {
+        override fun getInitialState(): List<Int> =
+            buildList {
+                repeat(14) {
+                    add(it + 1)
                 }
-            )
-        },
-        bottomBar = {
-            BottomAppBar(
-                modifier = Modifier.padding(
-                    bottom = WindowInsets.navigationBars.asPaddingValues()
-                        .calculateBottomPadding()
-                ),
-                containerColor = Color.Transparent
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth().align(Alignment.CenterVertically),
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Button(
-                        onClick = {},
-                        modifier = Modifier
-                            .width(250.dp)
-                            .height(50.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xFFFEE1FC),
-                            contentColor = Color(0xFFFE5A8F),
-                        ),
-                        shape = ShapeDefaults.Medium,
-                        border = BorderStroke(
-                            width = 4.dp ,
-                            color = Color(0x9971566E)
-                        ),
-                        contentPadding = PaddingValues(0.dp)
-                    ) {
+                add(16)
+                add(15)
+            }
+    }
+    var cells by remember { mutableStateOf(engine.getInitialState()) }
+
+    EmptyProjectTheme {
+        Scaffold(
+            modifier = Modifier.fillMaxSize(),
+            topBar = {
+                CenterAlignedTopAppBar(
+                    title = {
                         Text(
-                            text = stringResource(R.string.reset),
-                            fontSize = 25.sp,
-                            fontWeight = FontWeight.Bold
+                            text = stringResource(R.string.fifteen_spots_game),
+                            fontSize = 40.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFFFE5A8F)
                         )
                     }
+                )
+            },
+            bottomBar = {
+                BottomAppBar(
+                    modifier = Modifier.padding(
+                        bottom = WindowInsets.navigationBars.asPaddingValues()
+                            .calculateBottomPadding()
+                    ),
+                    containerColor = Color.Transparent
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.CenterVertically),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Button(
+                            onClick = {
+                                cells = engine.getInitialState()
+                            },
+                            modifier = Modifier
+                                .width(250.dp)
+                                .height(50.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color(0xFFFEE1FC),
+                                contentColor = Color(0xFFFE5A8F),
+                            ),
+                            shape = ShapeDefaults.Medium,
+                            border = BorderStroke(
+                                width = 4.dp ,
+                                color = Color(0x9971566E)
+                            ),
+                            contentPadding = PaddingValues(0.dp)
+                        ) {
+                            Text(
+                                text = stringResource(R.string.reset),
+                                fontSize = 25.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    }
                 }
             }
+        ) { innerPadding ->
+            Main(cells,
+                onCellsUpdate = { newState -> cells = newState },
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
+                engine = engine
+            )
         }
-    ) { innerPadding ->
-        Main(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
-            engine = object : FifteenEngine by FifteenEngine.Companion {
-                override fun getInitialState(): List<Int> =
-                    buildList {
-                        repeat(14) {add(it + 1)
-                        }
-                        add(16)
-                        add(15)
-                    }
-            }
-        )
     }
 }

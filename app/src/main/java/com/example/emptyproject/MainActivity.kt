@@ -57,6 +57,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            var cells by remember { mutableStateOf(FifteenEngine.getInitialState()) }
             EmptyProjectTheme {
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
@@ -87,7 +88,9 @@ class MainActivity : ComponentActivity() {
                                 horizontalArrangement = Arrangement.Center
                             ) {
                                 Button(
-                                    onClick = {},
+                                    onClick = {
+                                        cells = FifteenEngine.getInitialState()
+                                    },
                                     modifier = Modifier
                                         .width(250.dp)
                                         .height(50.dp),
@@ -112,7 +115,8 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 ) { innerPadding ->
-                    Main(
+                    Main(cells,
+                        onCellsUpdate = { newState ->  cells = newState },
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(innerPadding)
@@ -125,21 +129,24 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Main(
+    cells: List<Int>,
+    onCellsUpdate: (List<Int>) -> Unit,
     modifier: Modifier = Modifier,
     engine: FifteenEngine = FifteenEngine
 ) {
-    var cells by remember { mutableStateOf(engine.getInitialState()) }
     val isWin by remember { derivedStateOf {engine.isWin(cells)} }
     var move by remember { mutableIntStateOf(0) }
     val startTime by remember { mutableLongStateOf(System.currentTimeMillis()) }
     if (!isWin) {
         Grid(
-            cells,
+//            cells,
+//            onCellsUpdate = onCellsUpdate,
             modifier
         ) { chipNumber ->
             val oldState = cells
-            cells = engine.transitionState(cells, chipNumber)
-            if(cells != oldState) {
+            val newState = engine.transitionState(cells, chipNumber)
+            if(newState != oldState) {
+                onCellsUpdate(newState)
                 move++
             }
         }
@@ -178,12 +185,7 @@ fun Main(
                             color = Color(0x770e2dcf),
                             fontWeight = FontWeight.Bold,
                             fontStyle = FontStyle.Italic,
-                            fontSize = 36.sp,
-//                            shadow = Shadow(
-//                                color = Color(0xFFf4fb04),
-//                                offset = Offset(10f, 10f),
-//                                blurRadius = 15f
-//                            )
+                            fontSize = 36.sp
                         )
                     ) {
                         append(text2)
