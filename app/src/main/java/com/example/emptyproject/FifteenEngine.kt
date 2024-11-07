@@ -1,10 +1,13 @@
 package com.example.emptyproject
 
+import android.util.Log
+
 interface FifteenEngine {
     fun transitionState(oldState: List<Int>, cell: Int): List<Int>
     fun isWin(state: List<Int>): Boolean
     fun getInitialState(): List<Int>
     fun isStepPossible(inputList: List<Int>, numberForMove: Int): Boolean
+    fun isCorrectPosition(numbers: List<Int>, number: Int): Boolean
 
     companion object: FifteenEngine {
         val FINAL_STATE =  List(16){ it + 1 }
@@ -72,6 +75,14 @@ interface FifteenEngine {
                 emptyPlaceIndex + 1
             ).filter { it in inputList.indices }
             return indexToMove in neighbors
+
         }
+
+        override fun isCorrectPosition(numbers: List<Int>, number: Int): Boolean {
+            Log.i("Chip", "checking $number on ${numbers[number]} position")
+            return number == numbers[number - 1]
+
+        }
+
     }
 }

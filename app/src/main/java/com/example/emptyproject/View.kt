@@ -48,7 +48,7 @@ fun Grid(
                 horizontalArrangement = Arrangement.SpaceEvenly,
             ) {
                 repeat(4) { innerIndex ->
-                    Chip(cells[outerIndex * 4 + innerIndex], onChipClick)
+                    Chip(cells, cells[outerIndex * 4 + innerIndex], onChipClick)
                 }
             }
         }
@@ -58,28 +58,32 @@ fun Grid(
 
 @Composable
 fun Chip(
+    cells: List<Int>,
     cell: Int,
     onClick: (Int) -> Unit
 ) {
     val shape = RoundedCornerShape(8.dp)
-    val myBorder: BorderStroke?
-    val myText: String
-    val myColor: Long
+    var myBorder: BorderStroke? = BorderStroke(
+        5.dp, Brush.linearGradient(
+            listOf(
+                Color(0xFFE5DBE4),
+                Color(0xFF71566E)
+            )
+        )
+    )
+    var myText = cell.toString()
+    var myNumberColor = Color(0xFFFEE1FC)
+    var myBackgroundColor = Color(0xFFFE5A8F)
+
     if (cell == 16) {
         myBorder = null
         myText = ""
-        myColor = 0x00FEE1FC
-    } else {
-        myBorder = BorderStroke(
-            5.dp, Brush.linearGradient(
-                listOf(
-                    Color(0xFFE5DBE4),
-                    Color(0xFF71566E)
-                )
-            )
-        )
-        myText = cell.toString()
-        myColor = 0xFFFEE1FC
+        myNumberColor = Color(0x00FEE1FC)
+        myBackgroundColor = Color(0x00FE5A8F)
+    } else if(FifteenEngine.isCorrectPosition(cells, cell)) {
+        Log.i("Chip", "$cell is on correct position" )
+        myNumberColor = Color.Blue
+        myBackgroundColor  = Color.Yellow
     }
     Button(
         onClick = {
@@ -88,8 +92,8 @@ fun Chip(
         },
         modifier = Modifier.size(80.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = Color(myColor),
-            contentColor = Color(0xFFFE5A8F)
+            containerColor = myNumberColor,
+            contentColor = myBackgroundColor
         ),
         border = myBorder,
         shape = shape,
@@ -109,16 +113,17 @@ fun Chip(
 )
 @Composable
 fun StateHolderPreview(
-    engine: FifteenEngine = object : FifteenEngine by FifteenEngine.Companion {
-        override fun getInitialState(): List<Int> =
-            buildList {
-                repeat(14) {
-                    add(it + 1)
-                }
-                add(16)
-                add(15)
-            }
-    }
+    engine: FifteenEngine = FifteenEngine
+//    = object : FifteenEngine by FifteenEngine.Companion {
+//        override fun getInitialState(): List<Int> =
+//            buildList {
+//                repeat(14) {
+//                    add(it + 1)
+//                }
+//                add(16)
+//                add(15)
+//            }
+//    }
 ) {
     var cells by remember { mutableStateOf(engine.getInitialState()) }
     val isWin by remember { derivedStateOf {engine.isWin(cells)} }
