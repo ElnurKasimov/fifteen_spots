@@ -57,7 +57,7 @@ fun StateHolder(engine: FifteenEngine = FifteenEngine) {
     var cells by remember { mutableStateOf(engine.getInitialState()) }
     val isWin by remember { derivedStateOf {engine.isWin(cells)} }
     var move by remember { mutableIntStateOf(0) }
-    val startTime by remember { mutableLongStateOf(System.currentTimeMillis()) }
+    var startTime by remember { mutableLongStateOf(System.currentTimeMillis()) }
 
     fun onChipClick(chipNumber : Int) {
         val oldState = cells
@@ -67,7 +67,10 @@ fun StateHolder(engine: FifteenEngine = FifteenEngine) {
         }
     }
 
-    fun onResetClick(): List<Int> = engine.getInitialState()
+    fun onResetClick() {
+        cells = engine.getInitialState()
+        startTime = System.currentTimeMillis()
+    }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),

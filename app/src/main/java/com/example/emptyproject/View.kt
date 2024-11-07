@@ -103,97 +103,6 @@ fun Chip(
     }
 }
 
-
-
-//@OptIn(ExperimentalMaterial3Api::class)
-//@Preview(
-//    device = "spec:parent=pixel_5",
-//    showBackground = true, showSystemUi = true, locale = "uk"
-//)
-//@Composable
-//fun GreetingPreview() {
-//    val engine = object : FifteenEngine by FifteenEngine.Companion {
-//        override fun getInitialState(): List<Int> =
-//            buildList {
-//                repeat(14) {
-//                    add(it + 1)
-//                }
-//                add(16)
-//                add(15)
-//            }
-//    }
-//    var cells by remember { mutableStateOf(engine.getInitialState()) }
-//
-//    EmptyProjectTheme {
-//        Scaffold(
-//            modifier = Modifier.fillMaxSize(),
-//            topBar = {
-//                CenterAlignedTopAppBar(
-//                    title = {
-//                        Text(
-//                            text = stringResource(R.string.fifteen_spots_game),
-//                            fontSize = 40.sp,
-//                            fontWeight = FontWeight.Bold,
-//                            color = Color(0xFFFE5A8F)
-//                        )
-//                    }
-//                )
-//            },
-//            bottomBar = {
-//                BottomAppBar(
-//                    modifier = Modifier.padding(
-//                        bottom = WindowInsets.navigationBars.asPaddingValues()
-//                            .calculateBottomPadding()
-//                    ),
-//                    containerColor = Color.Transparent
-//                ) {
-//                    Row(
-//                        modifier = Modifier
-//                            .fillMaxWidth()
-//                            .align(Alignment.CenterVertically),
-//                        horizontalArrangement = Arrangement.Center
-//                    ) {
-//                        Button(
-//                            onClick = {
-//                                cells = engine.getInitialState()
-//                            },
-//                            modifier = Modifier
-//                                .width(250.dp)
-//                                .height(50.dp),
-//                            colors = ButtonDefaults.buttonColors(
-//                                containerColor = Color(0xFFFEE1FC),
-//                                contentColor = Color(0xFFFE5A8F),
-//                            ),
-//                            shape = ShapeDefaults.Medium,
-//                            border = BorderStroke(
-//                                width = 4.dp ,
-//                                color = Color(0x9971566E)
-//                            ),
-//                            contentPadding = PaddingValues(0.dp)
-//                        ) {
-//                            Text(
-//                                text = stringResource(R.string.reset),
-//                                fontSize = 25.sp,
-//                                fontWeight = FontWeight.Bold
-//                            )
-//                        }
-//                    }
-//                }
-//            }
-//        ) { innerPadding ->
-//            Main(cells,
-//                onCellsUpdate = { newState -> cells = newState },
-//                modifier = Modifier
-//                    .fillMaxSize()
-//                    .padding(innerPadding),
-//                engine = engine
-//            )
-//        }
-//    }
-//}
-
-
-
 @Preview(
     device = "spec:parent=pixel_5",
     showBackground = true, showSystemUi = true, locale = "uk"
@@ -214,7 +123,7 @@ fun StateHolderPreview(
     var cells by remember { mutableStateOf(engine.getInitialState()) }
     val isWin by remember { derivedStateOf {engine.isWin(cells)} }
     var move by remember { mutableIntStateOf(0) }
-    val startTime by remember { mutableLongStateOf(System.currentTimeMillis()) }
+    var startTime by remember { mutableLongStateOf(System.currentTimeMillis()) }
 
     fun onChipClick(chipNumber : Int) {
         val oldState = cells
@@ -224,7 +133,11 @@ fun StateHolderPreview(
         }
     }
 
-    fun onResetClick(): List<Int> = engine.getInitialState()
+    fun onResetClick() {
+        cells = engine.getInitialState()
+        startTime = System.currentTimeMillis()
+        move = 0
+    }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
