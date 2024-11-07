@@ -20,32 +20,26 @@ interface FifteenEngine {
             return playingChips
         }
 
-        private fun isSolvable(list: List<Int>): Boolean {
-            val inversions = countInversions(list)
-            val blankRow = blankRowFromBottom(list)
-            return if (4 % 2 == 0) {
-                (inversions % 2 == 0) == (blankRow % 2 != 0)
+//
+
+        private fun isSolvable(cells: List<Int>, size: Int = 4): Boolean {
+            val inversions = cells
+                .filter { it != 16 }
+                .flatMapIndexed { index, value ->
+                    cells.subList(index + 1, cells.size)
+                        .filter { it != 16 && it < value }
+                        .map { 1 } // Count one inversion
+                }
+                .sum()
+
+            val emptyRow =
+                (size - cells.indexOf(16) / size) // строка с пустой клеткой (отсчет снизу)
+
+            return if (size % 2 == 0) {
+                (emptyRow % 2 == 0) != (inversions % 2 == 0)
             } else {
                 inversions % 2 == 0
             }
-        }
-
-        private fun blankRowFromBottom(list: List<Int>): Int {
-            val gridSize = 4
-            val blankIndex = list.indexOf(0)
-            return gridSize - (blankIndex / gridSize)
-        }
-
-        private fun countInversions(list: List<Int>): Int {
-            var inversions = 0
-            for (i in list.indices) {
-                for (j in i + 1 until list.size) {
-                    if (list[i] != 0 && list[j] != 0 && list[i] > list[j]) {
-                        inversions++
-                    }
-                }
-            }
-            return inversions
         }
 
         override fun transitionState(oldState: List<Int>, cell: Int): List<Int> {

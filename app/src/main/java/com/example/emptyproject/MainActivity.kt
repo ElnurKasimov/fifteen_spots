@@ -70,6 +70,7 @@ fun StateHolder(engine: FifteenEngine = FifteenEngine) {
     fun onResetClick() {
         cells = engine.getInitialState()
         startTime = System.currentTimeMillis()
+        move = 0
     }
 
     Scaffold(
@@ -91,61 +92,7 @@ fun StateHolder(engine: FifteenEngine = FifteenEngine) {
 
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun MyTopBar() {
-    CenterAlignedTopAppBar(
-        title = {
-            Text(
-                text = stringResource(R.string.fifteen_spots_game),
-                fontSize = 40.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color(0xFFFE5A8F)
-            )
-        }
-    )
-}
 
-@Composable
-fun MyBottomBar(onResetClick: () -> Unit) {
-    BottomAppBar(
-        modifier = Modifier.padding(
-            bottom = WindowInsets.navigationBars.asPaddingValues()
-                .calculateBottomPadding()
-        ),
-        containerColor = Color.Transparent
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.CenterVertically),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Button(
-                onClick = onResetClick,
-                modifier = Modifier
-                    .width(250.dp)
-                    .height(50.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFFFEE1FC),
-                    contentColor = Color(0xFFFE5A8F),
-                ),
-                shape = ShapeDefaults.Medium,
-                border = BorderStroke(
-                    width = 4.dp ,
-                    color = Color(0x9971566E)
-                ),
-                contentPadding = PaddingValues(0.dp)
-            ) {
-                Text(
-                    text = stringResource(R.string.reset),
-                    fontSize = 25.sp,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-        }
-    }
-}
 
 @Composable
 fun Main(
